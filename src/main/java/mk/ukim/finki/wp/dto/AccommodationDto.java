@@ -9,6 +9,7 @@ public class AccommodationDto {
     private Category category;
     private Long hostId;
     private Integer numRooms;
+    private Integer guestId;
 
 
 }

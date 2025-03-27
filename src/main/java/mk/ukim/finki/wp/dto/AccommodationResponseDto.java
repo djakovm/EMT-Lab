@@ -3,6 +3,11 @@ package mk.ukim.finki.wp.dto;
 import lombok.Data;
 import mk.ukim.finki.wp.model.Accommodation;
 import mk.ukim.finki.wp.model.Category;
+import mk.ukim.finki.wp.model.Guest;
+
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 public class AccommodationResponseDto {
     private Long id;

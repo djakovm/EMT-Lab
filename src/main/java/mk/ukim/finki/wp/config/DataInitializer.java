@@ -3,9 +3,13 @@ package mk.ukim.finki.wp.config;
 import jakarta.annotation.PostConstruct;
 import mk.ukim.finki.wp.model.*;
 import mk.ukim.finki.wp.repository.AccommodationRepository;
+import mk.ukim.finki.wp.repository.GuestRepository;
 import mk.ukim.finki.wp.repository.HostRepository;
 import mk.ukim.finki.wp.repository.CountryRepository;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class DataInitializer {
@@ -13,17 +17,22 @@ public class DataInitializer {
     private final AccommodationRepository accommodationRepository;
     private final HostRepository hostRepository;
     private final CountryRepository countryRepository;
+    private final GuestRepository guestRepository;
 
     public DataInitializer(AccommodationRepository accommodationRepository,
                            HostRepository hostRepository,
-                           CountryRepository countryRepository) {
+                           CountryRepository countryRepository, GuestRepository guestRepository) {
         this.accommodationRepository = accommodationRepository;
         this.hostRepository = hostRepository;
         this.countryRepository = countryRepository;
+        this.guestRepository = guestRepository;
     }
 
     @PostConstruct
     public void init() {
+
+
+
         // Step 1: Save countries
         Country macedonia = new Country();
         macedonia.setName("Macedonia");
@@ -35,23 +44,38 @@ public class DataInitializer {
         germany.setContinent("Europe");
         germany = countryRepository.save(germany);
 
+        Guest guest = new Guest();
+        guest.setName("Guest");
+        guest.setSurname("GG");
+        guest.setCountry(macedonia);
+        guest = guestRepository.save(guest);
+
+
+
+        List<Guest> guestList = new ArrayList<>();
+        guestList.add(guest);
+
+
         // Step 2: Create and save hosts
         Host ana = new Host();
         ana.setName("Ana");
         ana.setSurname("Stanoeva");
         ana.setCountry(macedonia);
+        ana.setGuests(guestList);
         ana = hostRepository.save(ana);
 
         Host marko = new Host();
         marko.setName("Marko");
         marko.setSurname("Petrov");
         marko.setCountry(macedonia);
+        marko.setGuests(guestList);
         marko = hostRepository.save(marko);
 
         Host lena = new Host();
         lena.setName("Lena");
         lena.setSurname("Müller");
         lena.setCountry(germany);
+        lena.setGuests(guestList);
         lena = hostRepository.save(lena);
 
         // Step 3: Create and save accommodations

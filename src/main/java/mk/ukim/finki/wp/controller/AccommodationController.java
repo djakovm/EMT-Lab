@@ -2,6 +2,8 @@ package mk.ukim.finki.wp.controller;
 
 import mk.ukim.finki.wp.dto.AccommodationDto;
 import mk.ukim.finki.wp.dto.AccommodationResponseDto;
+import mk.ukim.finki.wp.model.Guest;
+import mk.ukim.finki.wp.repository.GuestRepository;
 import mk.ukim.finki.wp.service.AccommodationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -14,14 +16,21 @@ import java.util.List;
 public class AccommodationController {
 
     private final AccommodationService accommodationService;
+    private final GuestRepository guestRepository;
 
-    public AccommodationController(AccommodationService accommodationService) {
+    public AccommodationController(AccommodationService accommodationService, GuestRepository guestRepository) {
         this.accommodationService = accommodationService;
+        this.guestRepository = guestRepository;
     }
 
     @GetMapping
     public List<AccommodationResponseDto> listAll(){
         return accommodationService.listAll();
+    }
+
+    @GetMapping("/guests")
+    public List<Guest> getGuests(){
+        return guestRepository.findAll();
     }
 
     @PostMapping

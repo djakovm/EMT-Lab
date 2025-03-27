@@ -3,8 +3,10 @@ package mk.ukim.finki.wp.service;
 import mk.ukim.finki.wp.dto.AccommodationDto;
 import mk.ukim.finki.wp.dto.AccommodationResponseDto;
 import mk.ukim.finki.wp.model.Accommodation;
+import mk.ukim.finki.wp.model.Guest;
 import mk.ukim.finki.wp.model.Host;
 import mk.ukim.finki.wp.repository.AccommodationRepository;
+import mk.ukim.finki.wp.repository.GuestRepository;
 import mk.ukim.finki.wp.repository.HostRepository;
 import org.springframework.stereotype.Service;
 
@@ -15,10 +17,12 @@ public class AccommodationServiceImpl implements AccommodationService {
 
     private final AccommodationRepository accommodationRepository;
     private final HostRepository hostRepository;
+    private final GuestRepository guestRepository;
 
-    public AccommodationServiceImpl(AccommodationRepository accommodationRepository, HostRepository hostRepository) {
+    public AccommodationServiceImpl(AccommodationRepository accommodationRepository, HostRepository hostRepository, GuestRepository guestRepository) {
         this.accommodationRepository = accommodationRepository;
         this.hostRepository = hostRepository;
+        this.guestRepository = guestRepository;
     }
 
     @Override
@@ -29,12 +33,21 @@ public class AccommodationServiceImpl implements AccommodationService {
     @Override
     public AccommodationResponseDto addAccommodation(AccommodationDto accommodationDto) {
         Host host = hostRepository.findById(accommodationDto.getHostId()).get(); //exception if not present
+        Guest guest = guestRepository.findById(Long.valueOf(accommodationDto.getGuestId())).get();
+        List<Guest> guests = host.getGuests();
+        guests.add(guest);
+
+        host.setGuests(guests);
+
         Accommodation accommodation = new Accommodation();
         accommodation.setName(accommodationDto.getName());
         accommodation.setHost(host);
         accommodation.setCategory(accommodationDto.getCategory());
         accommodation.setNumRooms(accommodationDto.getNumRooms());
         accommodation.setAvailable(true);
+
+
+
         return new AccommodationResponseDto(accommodationRepository.save(accommodation));
     }
 
