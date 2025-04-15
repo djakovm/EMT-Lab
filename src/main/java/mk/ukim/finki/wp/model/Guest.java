@@ -20,6 +20,9 @@ public class Guest {
     Country country;
 
     @ManyToMany
+    private List<Accommodation> temporaryReservations = new ArrayList<>();
+
+    @ManyToMany
     @JoinTable(
             name = "guest_host",
             joinColumns = @JoinColumn(name = "guest_id"),

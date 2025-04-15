@@ -19,7 +19,9 @@ public class AccommodationServiceImpl implements AccommodationService {
     private final HostRepository hostRepository;
     private final GuestRepository guestRepository;
 
-    public AccommodationServiceImpl(AccommodationRepository accommodationRepository, HostRepository hostRepository, GuestRepository guestRepository) {
+    public AccommodationServiceImpl(AccommodationRepository accommodationRepository,
+                                    HostRepository hostRepository,
+                                    GuestRepository guestRepository) {
         this.accommodationRepository = accommodationRepository;
         this.hostRepository = hostRepository;
         this.guestRepository = guestRepository;
@@ -27,17 +29,20 @@ public class AccommodationServiceImpl implements AccommodationService {
 
     @Override
     public List<AccommodationResponseDto> listAll() {
-        return accommodationRepository.findAll().stream().map(AccommodationResponseDto::new).toList();
+        return accommodationRepository.findAll().stream()
+                .map(AccommodationResponseDto::new)
+                .toList();
     }
 
     @Override
     public AccommodationResponseDto addAccommodation(AccommodationDto accommodationDto) {
-        Host host = hostRepository.findById(accommodationDto.getHostId()).get(); //exception if not present
-        Guest guest = guestRepository.findById(Long.valueOf(accommodationDto.getGuestId())).get();
-        List<Guest> guests = host.getGuests();
-        guests.add(guest);
+        Host host = hostRepository.findById(accommodationDto.getHostId())
+                .orElseThrow(() -> new RuntimeException("Host not found with ID: " + accommodationDto.getHostId()));
 
-        host.setGuests(guests);
+        Guest guest = guestRepository.findById(Long.valueOf(accommodationDto.getGuestId()))
+                .orElseThrow(() -> new RuntimeException("Guest not found with ID: " + accommodationDto.getGuestId()));
+
+        host.getGuests().add(guest);
 
         Accommodation accommodation = new Accommodation();
         accommodation.setName(accommodationDto.getName());
@@ -46,24 +51,28 @@ public class AccommodationServiceImpl implements AccommodationService {
         accommodation.setNumRooms(accommodationDto.getNumRooms());
         accommodation.setAvailable(true);
 
-
-
         return new AccommodationResponseDto(accommodationRepository.save(accommodation));
     }
 
     @Override
     public void deleteAccommodation(Long id) {
+        if (!accommodationRepository.existsById(id)) {
+            throw new RuntimeException("Accommodation not found with ID: " + id);
+        }
         accommodationRepository.deleteById(id);
     }
 
     @Override
     public AccommodationResponseDto update(Long id, AccommodationDto accommodationDto) {
-        Accommodation accommodation = accommodationRepository.findById(id).get();
+        Accommodation accommodation = accommodationRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Accommodation not found with ID: " + id));
+
+        Host host = hostRepository.findById(accommodationDto.getHostId())
+                .orElseThrow(() -> new RuntimeException("Host not found with ID: " + accommodationDto.getHostId()));
+
         accommodation.setName(accommodationDto.getName());
         accommodation.setCategory(accommodationDto.getCategory());
         accommodation.setNumRooms(accommodationDto.getNumRooms());
-
-        Host host = hostRepository.findById(accommodationDto.getHostId()).get();
         accommodation.setHost(host);
 
         return new AccommodationResponseDto(accommodationRepository.save(accommodation));
@@ -71,7 +80,9 @@ public class AccommodationServiceImpl implements AccommodationService {
 
     @Override
     public void rent(Long id) {
-        Accommodation accommodation = accommodationRepository.findById(id).get();
+        Accommodation accommodation = accommodationRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Accommodation not found with ID: " + id));
+
         accommodation.setAvailable(false);
         accommodationRepository.save(accommodation);
     }

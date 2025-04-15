@@ -2,10 +2,8 @@ package mk.ukim.finki.wp.config;
 
 import jakarta.annotation.PostConstruct;
 import mk.ukim.finki.wp.model.*;
-import mk.ukim.finki.wp.repository.AccommodationRepository;
-import mk.ukim.finki.wp.repository.GuestRepository;
-import mk.ukim.finki.wp.repository.HostRepository;
-import mk.ukim.finki.wp.repository.CountryRepository;
+import mk.ukim.finki.wp.repository.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -18,26 +16,29 @@ public class DataInitializer {
     private final HostRepository hostRepository;
     private final CountryRepository countryRepository;
     private final GuestRepository guestRepository;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public DataInitializer(AccommodationRepository accommodationRepository,
                            HostRepository hostRepository,
-                           CountryRepository countryRepository, GuestRepository guestRepository) {
+                           CountryRepository countryRepository,
+                           GuestRepository guestRepository,
+                           UserRepository userRepository,
+                           PasswordEncoder passwordEncoder) {
         this.accommodationRepository = accommodationRepository;
         this.hostRepository = hostRepository;
         this.countryRepository = countryRepository;
         this.guestRepository = guestRepository;
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @PostConstruct
     public void init() {
-
-
-
-        // Step 1: Save countries
         Country macedonia = new Country();
         macedonia.setName("Macedonia");
         macedonia.setContinent("Europe");
-        macedonia = countryRepository.save(macedonia); // save and reassign with id
+        macedonia = countryRepository.save(macedonia);
 
         Country germany = new Country();
         germany.setName("Germany");
@@ -50,13 +51,8 @@ public class DataInitializer {
         guest.setCountry(macedonia);
         guest = guestRepository.save(guest);
 
+        List<Guest> guestList = List.of(guest);
 
-
-        List<Guest> guestList = new ArrayList<>();
-        guestList.add(guest);
-
-
-        // Step 2: Create and save hosts
         Host ana = new Host();
         ana.setName("Ana");
         ana.setSurname("Stanoeva");
@@ -78,7 +74,6 @@ public class DataInitializer {
         lena.setGuests(guestList);
         lena = hostRepository.save(lena);
 
-        // Step 3: Create and save accommodations
         Accommodation a1 = new Accommodation();
         a1.setName("Sunny Apartment");
         a1.setCategory(Category.APARTMENT);
@@ -102,5 +97,22 @@ public class DataInitializer {
         a3.setNumRooms(5);
         a3.setAvailable(true);
         accommodationRepository.save(a3);
+
+        // Step 4: Add test users
+        User user1 = new User();
+        user1.setUsername("user");
+        user1.setPassword(passwordEncoder.encode("user"));
+        user1.setName("Test");
+        user1.setSurname("User");
+        user1.setRole(Role.USER);
+        userRepository.save(user1);
+
+        User host1 = new User();
+        host1.setUsername("host");
+        host1.setPassword(passwordEncoder.encode("host"));
+        host1.setName("Hosty");
+        host1.setSurname("Hostovski");
+        host1.setRole(Role.HOST);
+        userRepository.save(host1);
     }
 }
