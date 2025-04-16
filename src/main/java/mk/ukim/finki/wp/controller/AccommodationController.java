@@ -4,14 +4,16 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.Parameter;
-import mk.ukim.finki.wp.dto.AccommodationDto;
-import mk.ukim.finki.wp.dto.AccommodationResponseDto;
-import mk.ukim.finki.wp.model.Guest;
+import mk.ukim.finki.wp.application.dto.AccommodationDto;
+import mk.ukim.finki.wp.application.dto.AccommodationResponseDto;
+import mk.ukim.finki.wp.domain.model.Guest;
 import mk.ukim.finki.wp.repository.GuestRepository;
-import mk.ukim.finki.wp.service.AccommodationService;
+import mk.ukim.finki.wp.domain.service.AccommodationService;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -73,10 +75,14 @@ public class AccommodationController {
 
     @Operation(summary = "Marks an accommodation as rented")
     @ApiResponse(responseCode = "200", description = "Accommodation successfully marked as rented")
-    @PutMapping("/{id}/rent")
-    public ResponseEntity<Void> rent(
-            @Parameter(description = "ID of the accommodation to rent") @PathVariable Long id) {
-        accommodationService.rent(id);
-        return ResponseEntity.ok().build();
+    @PostMapping("/{id}/rent")
+    public ResponseEntity<String> reserve(
+            @PathVariable Long id,
+            @RequestParam Long guestId,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate from,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate to
+    ) {
+        accommodationService.reserve(id, guestId, from, to);
+        return ResponseEntity.ok("Reservation created successfully.");
     }
 }

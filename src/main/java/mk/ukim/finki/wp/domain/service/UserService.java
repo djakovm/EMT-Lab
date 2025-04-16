@@ -1,7 +1,7 @@
-package mk.ukim.finki.wp.service;
+package mk.ukim.finki.wp.domain.service;
 
-import mk.ukim.finki.wp.model.Role;
-import mk.ukim.finki.wp.model.User;
+import mk.ukim.finki.wp.domain.model.Role;
+import mk.ukim.finki.wp.domain.model.User;
 import mk.ukim.finki.wp.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

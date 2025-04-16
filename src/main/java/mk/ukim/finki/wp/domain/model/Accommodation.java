@@ -1,7 +1,10 @@
-package mk.ukim.finki.wp.model;
+package mk.ukim.finki.wp.domain.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -15,6 +18,9 @@ public class Accommodation {
     Category category;
     @ManyToOne
     Host host;
+    @OneToMany(mappedBy = "accommodation", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Reservation> reservations = new ArrayList<>();
+
     int numRooms;
     boolean isAvailable;
 }

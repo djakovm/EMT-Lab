@@ -1,7 +1,6 @@
 package mk.ukim.finki.wp.repository;
 
-import mk.ukim.finki.wp.dto.AccommodationDto;
-import mk.ukim.finki.wp.model.Accommodation;
+import mk.ukim.finki.wp.domain.model.Accommodation;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

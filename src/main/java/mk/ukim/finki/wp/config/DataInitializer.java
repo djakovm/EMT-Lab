@@ -1,12 +1,11 @@
 package mk.ukim.finki.wp.config;
 
 import jakarta.annotation.PostConstruct;
-import mk.ukim.finki.wp.model.*;
+import mk.ukim.finki.wp.domain.model.*;
 import mk.ukim.finki.wp.repository.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Component

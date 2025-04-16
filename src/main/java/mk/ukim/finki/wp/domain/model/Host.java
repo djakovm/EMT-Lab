@@ -1,4 +1,4 @@
-package mk.ukim.finki.wp.model;
+package mk.ukim.finki.wp.domain.model;
 
 import jakarta.persistence.*;
 import lombok.Data;

@@ -1,15 +1,18 @@
-package mk.ukim.finki.wp.service;
+package mk.ukim.finki.wp.domain.service;
 
-import mk.ukim.finki.wp.dto.AccommodationDto;
-import mk.ukim.finki.wp.dto.AccommodationResponseDto;
-import mk.ukim.finki.wp.model.Accommodation;
-import mk.ukim.finki.wp.model.Guest;
-import mk.ukim.finki.wp.model.Host;
+import mk.ukim.finki.wp.application.dto.AccommodationDto;
+import mk.ukim.finki.wp.application.dto.AccommodationResponseDto;
+import mk.ukim.finki.wp.domain.model.Accommodation;
+import mk.ukim.finki.wp.domain.model.Guest;
+import mk.ukim.finki.wp.domain.model.Host;
+import mk.ukim.finki.wp.domain.model.Reservation;
 import mk.ukim.finki.wp.repository.AccommodationRepository;
 import mk.ukim.finki.wp.repository.GuestRepository;
 import mk.ukim.finki.wp.repository.HostRepository;
+import mk.ukim.finki.wp.repository.ReservationRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -18,13 +21,16 @@ public class AccommodationServiceImpl implements AccommodationService {
     private final AccommodationRepository accommodationRepository;
     private final HostRepository hostRepository;
     private final GuestRepository guestRepository;
+    private final ReservationRepository reservationRepository;
+
 
     public AccommodationServiceImpl(AccommodationRepository accommodationRepository,
                                     HostRepository hostRepository,
-                                    GuestRepository guestRepository) {
+                                    GuestRepository guestRepository, ReservationRepository reservationRepository) {
         this.accommodationRepository = accommodationRepository;
         this.hostRepository = hostRepository;
         this.guestRepository = guestRepository;
+        this.reservationRepository = reservationRepository;
     }
 
     @Override
@@ -86,4 +92,35 @@ public class AccommodationServiceImpl implements AccommodationService {
         accommodation.setAvailable(false);
         accommodationRepository.save(accommodation);
     }
+
+    @Override
+    public void reserve(Long accommodationId, Long guestId, LocalDate from, LocalDate to) {
+        Accommodation accommodation = accommodationRepository.findById(accommodationId)
+                .orElseThrow(() -> new RuntimeException("Accommodation not found"));
+
+        Guest guest = guestRepository.findById(guestId)
+                .orElseThrow(() -> new RuntimeException("Guest not found"));
+
+        List<Reservation> existingReservations = accommodation.getReservations();
+
+        boolean overlaps = existingReservations.stream().anyMatch(res ->
+                !(res.getDateTo().isBefore(from) || res.getDateFrom().isAfter(to))
+        );
+
+        if (overlaps) {
+            throw new RuntimeException("This accommodation is already reserved in that date range.");
+        }
+
+        Reservation reservation = new Reservation();
+        reservation.setAccommodation(accommodation);
+        reservation.setGuest(guest);
+        reservation.setDateFrom(from);
+        reservation.setDateTo(to);
+
+        reservationRepository.save(reservation);
+
+        accommodation.getReservations().add(reservation);
+        accommodationRepository.save(accommodation);
+    }
+
 }

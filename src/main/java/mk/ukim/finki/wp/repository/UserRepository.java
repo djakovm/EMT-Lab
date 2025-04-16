@@ -1,6 +1,6 @@
 package mk.ukim.finki.wp.repository;
 
-import mk.ukim.finki.wp.model.User;
+import mk.ukim.finki.wp.domain.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

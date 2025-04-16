@@ -1,6 +1,6 @@
-package mk.ukim.finki.wp.service;
+package mk.ukim.finki.wp.domain.service;
 
-import mk.ukim.finki.wp.model.Accommodation;
+import mk.ukim.finki.wp.domain.model.Accommodation;
 
 import java.util.List;
 

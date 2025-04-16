@@ -7,7 +7,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @SpringBootApplication
-//http://localhost:8080/swagger-ui/index.html
+//http://localhost:8080/swaggerus   -ui/index.htm
 public class Main {
     public static void main(String[] args) {
 

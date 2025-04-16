@@ -1,8 +1,8 @@
-package mk.ukim.finki.wp.dto;
+package mk.ukim.finki.wp.application.dto;
 
 import lombok.Data;
-import mk.ukim.finki.wp.model.Category;
-import mk.ukim.finki.wp.model.Host;
+import mk.ukim.finki.wp.domain.model.Category;
+
 @Data
 public class AccommodationDto {
     private String name;

@@ -3,8 +3,8 @@ package mk.ukim.finki.wp.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import mk.ukim.finki.wp.model.Accommodation;
-import mk.ukim.finki.wp.service.GuestReservationService;
+import mk.ukim.finki.wp.domain.model.Accommodation;
+import mk.ukim.finki.wp.domain.service.GuestReservationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

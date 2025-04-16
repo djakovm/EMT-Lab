@@ -1,12 +1,8 @@
-package mk.ukim.finki.wp.dto;
+package mk.ukim.finki.wp.application.dto;
 
 import lombok.Data;
-import mk.ukim.finki.wp.model.Accommodation;
-import mk.ukim.finki.wp.model.Category;
-import mk.ukim.finki.wp.model.Guest;
-
-import java.util.ArrayList;
-import java.util.List;
+import mk.ukim.finki.wp.domain.model.Accommodation;
+import mk.ukim.finki.wp.domain.model.Category;
 
 @Data
 public class AccommodationResponseDto {

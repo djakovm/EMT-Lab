@@ -1,4 +1,4 @@
-package mk.ukim.finki.wp.dto;
+package mk.ukim.finki.wp.application.dto;
 
 public record LoginDto(String username, String password) {}
 

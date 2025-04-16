@@ -1,8 +1,9 @@
-package mk.ukim.finki.wp.service;
+package mk.ukim.finki.wp.domain.service;
 
-import mk.ukim.finki.wp.dto.AccommodationDto;
-import mk.ukim.finki.wp.dto.AccommodationResponseDto;
+import mk.ukim.finki.wp.application.dto.AccommodationDto;
+import mk.ukim.finki.wp.application.dto.AccommodationResponseDto;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface AccommodationService {
@@ -15,4 +16,7 @@ public interface AccommodationService {
     AccommodationResponseDto update(Long id, AccommodationDto accommodationDto);
 
     void rent(Long id);
+
+    void reserve(Long accommodationId, Long guestId, LocalDate from, LocalDate to);
+
 }

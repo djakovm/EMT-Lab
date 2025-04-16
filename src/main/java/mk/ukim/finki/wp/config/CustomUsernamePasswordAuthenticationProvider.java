@@ -1,6 +1,6 @@
 package mk.ukim.finki.wp.config;
 
-import mk.ukim.finki.wp.service.UserService;
+import mk.ukim.finki.wp.domain.service.UserService;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -8,7 +8,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Component;
 
 public class CustomUsernamePasswordAuthenticationProvider implements AuthenticationProvider {
 

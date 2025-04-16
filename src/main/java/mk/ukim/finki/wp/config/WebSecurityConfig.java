@@ -1,6 +1,6 @@
 package mk.ukim.finki.wp.config;
 
-import mk.ukim.finki.wp.service.UserService;
+import mk.ukim.finki.wp.domain.service.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;

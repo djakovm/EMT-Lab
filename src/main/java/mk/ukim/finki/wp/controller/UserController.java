@@ -1,9 +1,8 @@
 package mk.ukim.finki.wp.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import mk.ukim.finki.wp.dto.RegisterDto;
-import mk.ukim.finki.wp.service.UserService;
+import mk.ukim.finki.wp.application.dto.RegisterDto;
+import mk.ukim.finki.wp.domain.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -32,4 +31,11 @@ public class UserController {
     public ResponseEntity<String> login() {
         return ResponseEntity.ok("Login successful");
     }
+
+    @Operation(summary = "Logs the user out of the application")
+    @GetMapping("/logout/success")
+    public ResponseEntity<String> logoutSuccess() {
+        return ResponseEntity.ok("Logout successful");
+    }
+
 }
