@@ -6,6 +6,7 @@ import mk.ukim.finki.wp.domain.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+@CrossOrigin(origins = "http://localhost:5173")
 
 @RestController
 @RequestMapping("/api/users")

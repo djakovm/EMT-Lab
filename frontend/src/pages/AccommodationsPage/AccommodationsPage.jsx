@@ -1,4 +1,3 @@
-// frontend/src/pages/AccommodationsPage.jsx
 import React, { useState } from 'react';
 import {
     Typography, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper,
@@ -7,21 +6,17 @@ import {
 import { useAccommodations } from '../../hooks/useAccommodations';
 
 const AccommodationsPage = () => {
-    // Use custom hook to get data and CRUD functions
-    const { accommodations, createAccommodation, updateAccommodation, deleteAccommodation } = useAccommodations();
+    const { items: accommodations, create, update, remove, rent } = useAccommodations();
 
-    // State for dialog visibility and form data
     const [isDialogOpen, setDialogOpen] = useState(false);
-    const [editingItem, setEditingItem] = useState(null); // if not null, we're editing this item
+    const [editingItem, setEditingItem] = useState(null);
 
-    // Form field states (for simplicity, using separate state per field)
     const [name, setName] = useState('');
     const [category, setCategory] = useState('');
-    const [hostId, setHostId] = useState('');        // assuming we'll use an ID for host (requires host list)
+    const [hostId, setHostId] = useState('');
     const [numRooms, setNumRooms] = useState('');
     const [isAvailable, setIsAvailable] = useState(false);
 
-    // Open dialog for adding a new accommodation
     const handleOpenAdd = () => {
         setEditingItem(null);
         setName('');
@@ -32,53 +27,56 @@ const AccommodationsPage = () => {
         setDialogOpen(true);
     };
 
-    // Open dialog for editing an existing accommodation
     const handleOpenEdit = (accommodation) => {
         setEditingItem(accommodation);
         setName(accommodation.name || '');
         setCategory(accommodation.category || '');
-        // If accommodation.host is an object, assume it has an id or use its name
-        setHostId(accommodation.host?.id || '');
+        setHostId(accommodation.hostId || '');
         setNumRooms(accommodation.numRooms || '');
         setIsAvailable(accommodation.isAvailable || false);
         setDialogOpen(true);
     };
 
-    // Close dialog without saving
     const handleCloseDialog = () => {
         setDialogOpen(false);
     };
 
-    // Submit the form (add or edit)
     const handleSubmit = () => {
         const formData = {
             name,
             category,
-            hostId,       // using hostId (might need to map to host object in real use)
+            hostId,
             numRooms: Number(numRooms),
             isAvailable
         };
+
         if (editingItem) {
-            // Update existing accommodation
-            updateAccommodation(editingItem.id, formData);
+            update(editingItem.id, formData);
         } else {
-            // Create new accommodation
-            createAccommodation(formData);
+            create(formData);
         }
-        // After submitting, close the dialog
+
         setDialogOpen(false);
     };
 
-    // Handle delete action (with confirmation)
     const handleDelete = (id) => {
         if (window.confirm('Are you sure you want to delete this accommodation?')) {
-            deleteAccommodation(id);
+            remove(id);
+        }
+    };
+
+    const handleRent = (id) => {
+        const guestId = prompt("Enter guest ID:");
+        const from = prompt("Enter start date (yyyy-mm-dd):");
+        const to = prompt("Enter end date (yyyy-mm-dd):");
+
+        if (guestId && from && to) {
+            rent(id, guestId, from, to);
         }
     };
 
     return (
         <div>
-            {/* Page Title and Add button */}
             <Typography variant="h5" gutterBottom>
                 Accommodations
             </Typography>
@@ -86,7 +84,6 @@ const AccommodationsPage = () => {
                 Add New Accommodation
             </Button>
 
-            {/* Accommodations Table */}
             <TableContainer component={Paper}>
                 <Table>
                     <TableHead>
@@ -100,11 +97,11 @@ const AccommodationsPage = () => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {accommodations && accommodations.map(acc => (
+                        {accommodations.map(acc => (
                             <TableRow key={acc.id}>
                                 <TableCell>{acc.name}</TableCell>
                                 <TableCell>{acc.category}</TableCell>
-                                <TableCell>{acc.host ? acc.host.name : ''}</TableCell>
+                                <TableCell>{acc.host?.name || ''}</TableCell>
                                 <TableCell>{acc.numRooms}</TableCell>
                                 <TableCell>{acc.isAvailable ? 'Yes' : 'No'}</TableCell>
                                 <TableCell align="center">
@@ -114,10 +111,13 @@ const AccommodationsPage = () => {
                                     <Button size="small" color="error" onClick={() => handleDelete(acc.id)}>
                                         Delete
                                     </Button>
+                                    <Button size="small" color="secondary" onClick={() => handleRent(acc.id)}>
+                                        Rent
+                                    </Button>
                                 </TableCell>
                             </TableRow>
                         ))}
-                        {accommodations && accommodations.length === 0 && (
+                        {accommodations.length === 0 && (
                             <TableRow>
                                 <TableCell colSpan={6} align="center">No accommodations found.</TableCell>
                             </TableRow>
@@ -126,7 +126,6 @@ const AccommodationsPage = () => {
                 </Table>
             </TableContainer>
 
-            {/* Dialog for Add/Edit Accommodation */}
             <Dialog open={isDialogOpen} onClose={handleCloseDialog} fullWidth maxWidth="sm">
                 <DialogTitle>{editingItem ? 'Edit Accommodation' : 'Add New Accommodation'}</DialogTitle>
                 <DialogContent dividers>
@@ -137,15 +136,21 @@ const AccommodationsPage = () => {
                         fullWidth
                         margin="normal"
                     />
-                    <TextField
-                        label="Category"
+                    <Select
                         value={category}
                         onChange={(e) => setCategory(e.target.value)}
                         fullWidth
+                        displayEmpty
                         margin="normal"
-                    />
-                    {/* Example: Host selection (assuming we have a list of hosts from elsewhere) */}
-                    {/* For simplicity, using a text field. In a real app, you might use a Select dropdown with host options. */}
+                    >
+                        <MenuItem value="" disabled>Select category</MenuItem>
+                        <MenuItem value="ROOM">Room</MenuItem>
+                        <MenuItem value="HOUSE">House</MenuItem>
+                        <MenuItem value="FLAT">Flat</MenuItem>
+                        <MenuItem value="APARTMENT">Apartment</MenuItem>
+                        <MenuItem value="HOTEL">Hotel</MenuItem>
+                        <MenuItem value="MOTEL">Motel</MenuItem>
+                    </Select>
                     <TextField
                         label="Host ID"
                         value={hostId}
@@ -161,9 +166,7 @@ const AccommodationsPage = () => {
                         fullWidth
                         margin="normal"
                     />
-                    {/* For availability, we can use a simple dropdown or checkbox */}
                     <Select
-                        label="Available"
                         value={isAvailable ? 'yes' : 'no'}
                         onChange={(e) => setIsAvailable(e.target.value === 'yes')}
                         fullWidth

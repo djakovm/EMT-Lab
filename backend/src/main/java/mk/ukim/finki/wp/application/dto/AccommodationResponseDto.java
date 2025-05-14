@@ -10,6 +10,7 @@ public class AccommodationResponseDto {
     private String name;
     private Category category;
     private String hostFullName;
+    private Long hostId;
     private String countryName;
     private Integer numRooms;
     private boolean isAvailable;
@@ -19,6 +20,7 @@ public class AccommodationResponseDto {
         this.name = accommodation.getName();
         this.category = accommodation.getCategory();
         this.hostFullName = accommodation.getHost().getName() + " " + accommodation.getHost().getSurname();
+        this.hostId = accommodation.getHost().getId();
         this.countryName = accommodation.getHost().getCountry().getName();
         this.numRooms = accommodation.getNumRooms();
         this.isAvailable = accommodation.isAvailable();

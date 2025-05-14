@@ -1,17 +1,15 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
 import { Container, AppBar, Toolbar, Typography, Button, Box } from '@mui/material';
-import { Link as RouterLink } from 'react-router-dom';  // for linking with react-router
+import { Link as RouterLink } from 'react-router-dom';
 
 const Header = () => {
     return (
         <AppBar position="static" color="primary">
             <Toolbar>
-                {/* App name/title on the left */}
                 <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                     Accommodation Management
                 </Typography>
-                {/* Navigation links */}
                 <Button color="inherit" component={RouterLink} to="/">
                     Home
                 </Button>
@@ -41,14 +39,12 @@ const Footer = () => {
 
 const Layout = () => {
     return (
-        <Box display="flex" flexDirection="column" minHeight="100vh">
-            {/* Header on top */}
+        <Box display="flex" flexDirection="column" minHeight="100vh" minWidth="100vw">
             <Header />
-            {/* Main content: we wrap it in a Container and render the current page */}
-            <Container maxWidth="lg" sx={{ my: 4 }}>
-                <Outlet /> {/* This will render the component for the current route */}
+            <Container maxWidth={false} disableGutters sx={{ my: 4 }}>
+                <Outlet />
             </Container>
-            {/* Footer at bottom */}
+
             <Footer />
         </Box>
     );

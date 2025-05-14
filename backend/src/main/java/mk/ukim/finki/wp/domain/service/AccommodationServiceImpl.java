@@ -45,8 +45,10 @@ public class AccommodationServiceImpl implements AccommodationService {
         Host host = hostRepository.findById(accommodationDto.getHostId())
                 .orElseThrow(() -> new RuntimeException("Host not found with ID: " + accommodationDto.getHostId()));
 
-        Guest guest = guestRepository.findById(Long.valueOf(accommodationDto.getGuestId()))
-                .orElseThrow(() -> new RuntimeException("Guest not found with ID: " + accommodationDto.getGuestId()));
+//        Guest guest = guestRepository.findById(Long.valueOf(accommodationDto.getGuestId()))
+//                .orElseThrow(() -> new RuntimeException("Guest not found with ID: " + accommodationDto.getGuestId())); //TODO
+
+        Guest guest = guestRepository.findById(1L).get();
 
         host.getGuests().add(guest);
 
@@ -70,8 +72,9 @@ public class AccommodationServiceImpl implements AccommodationService {
 
     @Override
     public AccommodationResponseDto update(Long id, AccommodationDto accommodationDto) {
-        Accommodation accommodation = accommodationRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Accommodation not found with ID: " + id));
+        System.out.println("AAAAAAAAAAAAAAAAAAAA" + id);
+        Accommodation accommodation = accommodationRepository.findById(id).get();
+//                .orElseThrow(() -> new RuntimeException("Accommodation not found with ID: " + id));
 
         Host host = hostRepository.findById(accommodationDto.getHostId())
                 .orElseThrow(() -> new RuntimeException("Host not found with ID: " + accommodationDto.getHostId()));
