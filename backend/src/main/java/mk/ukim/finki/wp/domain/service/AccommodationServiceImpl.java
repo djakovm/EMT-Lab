@@ -72,9 +72,8 @@ public class AccommodationServiceImpl implements AccommodationService {
 
     @Override
     public AccommodationResponseDto update(Long id, AccommodationDto accommodationDto) {
-        System.out.println("AAAAAAAAAAAAAAAAAAAA" + id);
-        Accommodation accommodation = accommodationRepository.findById(id).get();
-//                .orElseThrow(() -> new RuntimeException("Accommodation not found with ID: " + id));
+        Accommodation accommodation = accommodationRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Accommodation not found with ID: " + id));
 
         Host host = hostRepository.findById(accommodationDto.getHostId())
                 .orElseThrow(() -> new RuntimeException("Host not found with ID: " + accommodationDto.getHostId()));

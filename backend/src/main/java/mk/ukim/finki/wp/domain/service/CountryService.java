@@ -8,4 +8,9 @@ import java.util.List;
 public interface CountryService {
     List<Country> listAll();
 
+    void deleteCountry(Long id);
+
+    Country update(Long id, Country country);
+
+    Country addCountry(Country country);
 }

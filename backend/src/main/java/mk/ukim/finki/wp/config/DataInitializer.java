@@ -6,6 +6,7 @@ import mk.ukim.finki.wp.repository.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -44,6 +45,11 @@ public class DataInitializer {
         germany.setContinent("Europe");
         germany = countryRepository.save(germany);
 
+        Country estonia = new Country();
+        estonia.setName("Estonia");
+        estonia.setContinent("Europe");
+        countryRepository.save(estonia);
+
         Guest guest = new Guest();
         guest.setName("Guest");
         guest.setSurname("GG");
@@ -72,6 +78,13 @@ public class DataInitializer {
         lena.setCountry(germany);
         lena.setGuests(guestList);
         lena = hostRepository.save(lena);
+
+        Host andrej = new Host();
+        andrej.setName("Andrej");
+        andrej.setSurname("Petrov");
+        andrej.setCountry(germany);
+        andrej.setGuests(new ArrayList<>());
+        hostRepository.save(andrej);
 
         Accommodation a1 = new Accommodation();
         a1.setName("Sunny Apartment");
