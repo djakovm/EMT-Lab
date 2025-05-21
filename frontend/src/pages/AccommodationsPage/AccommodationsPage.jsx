@@ -1,12 +1,28 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {
-    Typography, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper,
-    Dialog, DialogTitle, DialogContent, DialogActions, TextField, Select, MenuItem
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle,
+    MenuItem,
+    Paper,
+    Select,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    TextField,
+    Typography
 } from '@mui/material';
-import { useAccommodations } from '../../hooks/useAccommodations';
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import {useAccommodations} from '../../hooks/useAccommodations';
 
 const AccommodationsPage = () => {
-    const { items: accommodations, create, update, remove, rent } = useAccommodations();
+    const {items: accommodations, create, update, remove, rent} = useAccommodations();
 
     const [isDialogOpen, setDialogOpen] = useState(false);
     const [editingItem, setEditingItem] = useState(null);
@@ -16,6 +32,8 @@ const AccommodationsPage = () => {
     const [hostId, setHostId] = useState('');
     const [numRooms, setNumRooms] = useState('');
     const [isAvailable, setIsAvailable] = useState(false);
+
+    const [categoryFilter, setCategoryFilter] = useState('ALL');
 
     const handleOpenAdd = () => {
         setEditingItem(null);
@@ -75,14 +93,36 @@ const AccommodationsPage = () => {
         }
     };
 
+    const filteredAccommodations = categoryFilter === 'ALL'
+        ? accommodations
+        : accommodations.filter(acc => acc.category === categoryFilter);
+
     return (
         <div>
-            <Typography variant="h5" gutterBottom>
+            <Typography variant="h5" gutterBottom color='#0009'>
                 Accommodations
             </Typography>
-            <Button variant="contained" color="primary" onClick={handleOpenAdd} sx={{ mb: 2 }}>
+            <Button variant="contained" color="primary" onClick={handleOpenAdd} sx={{mb: 2}}>
                 Add New Accommodation
             </Button>
+
+            <ToggleButtonGroup
+                color="primary"
+                value={categoryFilter}
+                exclusive
+                onChange={(e, newCategory) => {
+                    if (newCategory !== null) setCategoryFilter(newCategory);
+                }}
+                sx={{mb: 2}}
+            >
+                <ToggleButton value="ALL">All</ToggleButton>
+                <ToggleButton value="ROOM">Room</ToggleButton>
+                <ToggleButton value="HOUSE">House</ToggleButton>
+                <ToggleButton value="FLAT">Flat</ToggleButton>
+                <ToggleButton value="APARTMENT">Apartment</ToggleButton>
+                <ToggleButton value="HOTEL">Hotel</ToggleButton>
+                <ToggleButton value="MOTEL">Motel</ToggleButton>
+            </ToggleButtonGroup>
 
             <TableContainer component={Paper}>
                 <Table>
@@ -97,7 +137,7 @@ const AccommodationsPage = () => {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {accommodations.map(acc => (
+                        {filteredAccommodations.map(acc => (
                             <TableRow key={acc.id}>
                                 <TableCell>{acc.name}</TableCell>
                                 <TableCell>{acc.category}</TableCell>
@@ -117,7 +157,7 @@ const AccommodationsPage = () => {
                                 </TableCell>
                             </TableRow>
                         ))}
-                        {accommodations.length === 0 && (
+                        {filteredAccommodations.length === 0 && (
                             <TableRow>
                                 <TableCell colSpan={6} align="center">No accommodations found.</TableCell>
                             </TableRow>

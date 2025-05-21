@@ -11,7 +11,6 @@ const CountriesPage = () => {
 
     const [isDialogOpen, setDialogOpen] = useState(false);
     const [editingCountry, setEditingCountry] = useState(null);
-    // Form fields
     const [name, setName] = useState('');
     const [continent, setContinent] = useState('');
 
@@ -51,7 +50,7 @@ const CountriesPage = () => {
 
     return (
         <div>
-            <Typography variant="h5" gutterBottom>Countries</Typography>
+            <Typography variant="h5" gutterBottom color='#0009'>Countries</Typography>
             <Button variant="contained" onClick={handleOpenAdd} sx={{ mb: 2 }}>
                 Add New Country
             </Button>

@@ -29,7 +29,7 @@ const Header = () => {
 
 const Footer = () => {
     return (
-        <Box component="footer" sx={{ py: 2, textAlign: 'center', mt: 'auto', backgroundColor: '#f5f5f5' }}>
+        <Box component="footer" sx={{ py: 2, textAlign: 'center', mt: 'auto', backgroundColor: 'white' }}>
             <Typography variant="body2" color="textSecondary">
                 © 2025 Accommodation Management App
             </Typography>
@@ -39,7 +39,7 @@ const Footer = () => {
 
 const Layout = () => {
     return (
-        <Box display="flex" flexDirection="column" minHeight="100vh" minWidth="100vw">
+        <Box display="flex" flexDirection="column" minHeight="100vh" minWidth="100vw" bgcolor="#F5F5F5">
             <Header />
             <Container maxWidth={false} disableGutters sx={{ my: 4 }}>
                 <Outlet />

@@ -55,7 +55,7 @@ const HostsPage = () => {
 
     return (
         <div>
-            <Typography variant="h5" gutterBottom>Hosts</Typography>
+            <Typography variant="h5" gutterBottom color='#0009'>Hosts</Typography>
             <Button variant="contained" onClick={handleOpenAdd} sx={{ mb: 2 }}>
                 Add New Host
             </Button>
